@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>数据可视化</title>
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+
+  <body>
+    <header>
+      <h1>第七次人口普查部分数据</h1>
+      <div class="showTime">当前时间：2020年3月17-0时54分14秒</div>
+      <script>
+        var t = null;
+        t = setTimeout(time, 1000); //開始运行
+        function time() {
+          clearTimeout(t); //清除定时器
+          dt = new Date();
+          var y = dt.getFullYear();
+          var mt = dt.getMonth() + 1;
+          var day = dt.getDate();
+          var h = dt.getHours(); //获取时
+          var m = dt.getMinutes(); //获取分
+          var s = dt.getSeconds(); //获取秒
+          document.querySelector(".showTime").innerHTML =
+            "当前时间：" +
+            y +
+            "年" +
+            mt +
+            "月" +
+            day +
+            "-" +
+            h +
+            "时" +
+            m +
+            "分" +
+            s +
+            "秒";
+          t = setTimeout(time, 1000); //设定定时器，循环运行
+        }
+      </script>
+    </header>
+	<section>
+		<div class="column">
+		  <div class="map">
+		    <div class="chart"></div>
+<!-- 		    <div class="map1"></div>
+		    <div class="map2"></div>
+		    <div class="map3"></div> -->
+		  </div>
+		</div>
+	</section>
+	
+	<section class="mainbox">
+		<div class="column">
+		  <div class="panel bar">
+		    <h2>出生率和死亡率</h2>
+		    <div class="chart">
+					<!-- <button>click</button> -->
+				  </div>
+		    <div class="panel-footer"></div>
+		  </div>
+		</div>
+		<div class="column">
+		  <div class="panel line">
+		    <h2>性别比</h2>
+		    <div class="chart"></div>
+		    <div class="panel-footer"></div>
+		  </div>
+		</div>
+		<div class="column">
+		  <div class="panel pie">
+		    <h2>教育情况</h2>
+		    <div class="chart"></div>
+		    <div class="panel-footer"></div>
+		  </div>
+		</div>
+		
+	</section>
+	
+    <section class="mainbox">
+      <div class="column">
+        <div class="panel bar1">
+          <h2>各年龄段占比</h2>
+          <div class="chart"></div>
+          <div class="panel-footer"></div>
+        </div>
+	  </div>
+	  <div class="column">
+        <div class="panel line1">
+          <h2>婚姻状况</h2>
+          <div class="chart"></div>
+          <div class="panel-footer"></div>
+        </div>
+	  </div>
+	  <div class="column">
+        <div class="panel pie1">
+          <h2>人口金字塔</h2>
+          <div class="chart"></div>
+          <div class="panel-footer"></div>
+        </div>
+      </div>
+    </section>
+    <script src="js/flexible.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/echarts.min.js"></script>
+    <!-- <script src="js/index.js"></script> -->
+    <script src="js/china.js"></script>
+	<script src="js/vintage.js"></script>
+    <!-- <script src="js/myMap.js"></script> -->
+	<script type="module">
+		import {setData1,setData2,setData3,setData4,setData5,setData6} from './js/options.js';
+		import {map} from './js/myMap.js';
+		function bar(data){
+			var cities = [];
+			var birth = [];
+			var death = [];
+			var sub = [];
+			for(var i = 0 ; i < data.length; i++){
+				cities.push(data[i].地区);
+				birth.push(data[i].出生人数);
+				death.push(data[i].死亡人数);
+				// sub.push((data[i].出生人数-data[i].死亡人数)/1000)
+				// console.log(data[i].性别比)
+			}
+			// echarts图表
+			setData1(cities,birth,death);
+		}
+		
+		function line(data){
+			var cities = [];
+			var sexpercent = [];
+
+			for(var i = 0 ; i < data.length; i++){
+				cities.push(data[i].地区);
+				sexpercent.push(data[i].性别比);
+			}
+			setData2(cities,sexpercent);
+		}
+		
+		function pie(data){
+			var education = [];
+			var people = [];
+		
+			for(var i = 0 ; i < data.length; i++){
+				education.push(data[i].学历);
+				people.push(data[i].人数);
+			}
+			setData3(education,people);
+		}
+		
+		function bar1(data){
+			var cities = [];
+			var ages1 = [];
+			var ages2 = [];
+			var ages3 = [];
+			var ages4 = [];
+			var ages5 = [];
+			var ages6 = [];
+					
+			for(var i = 0 ; i < data.length; i++){
+				cities.push(data[i].地区);
+				ages1.push(data[i].二十);
+				ages2.push(data[i].四十);
+				ages3.push(data[i].六十);
+				ages4.push(data[i].八十);
+				ages5.push(data[i].一百);
+				ages6.push(data[i].一百岁以上);
+				}
+				// echarts图表
+				setData4(cities,ages1,ages2,ages3,ages4,ages5,ages6);
+			}
+				
+			function pie1(data){
+				var ages = [];
+				var sex1 = [];
+				var sex2 = [];
+				
+				for(var i = 0 ; i < data.length; i++){
+					ages.push(data[i].年龄);
+					sex1.push(data[i].男);
+					sex2.push(-1 * data[i].女);
+					// sub.push((data[i].出生人数-data[i].死亡人数)/1000)
+					// console.log(data[i].性别比)
+				}
+				// echarts图表
+				setData5(ages,sex1,sex2);
+			}
+			
+			function line1(data){
+				var cities = [];
+				var state1 = [];
+				var state2 = [];
+				var state3 = [];
+				var state4 = [];
+				
+				for(var i = 0 ; i < data.length; i++){
+					cities.push(data[i].地区);
+					state1.push(data[i].未婚);
+					state2.push(data[i].有配偶);
+					state3.push(data[i].离婚);
+					state4.push(data[i].丧偶);
+				}
+				// echarts图表
+				setData6(cities,state1,state2,state3,state4);
+			}
+				
+		
+		function chinaMap(data){
+			var cities = [];
+			var y2021 = [];
+			var y2020 = [];
+			var y2019 = [];
+			var y2018 = [];
+			var y2017 = [];
+			var y2016 = [];
+			var y2015 = [];
+			var y2014 = [];
+			var y2013 = [];
+			var y2012 = [];
+			var y2011 = [];
+			
+				
+			for(var i = 0 ; i < data.length; i++){
+				cities.push(data[i].地区);
+				y2021.push(data[i].y2021);
+				y2020.push(data[i].y2020);
+				y2019.push(data[i].y2019);
+				y2018.push(data[i].y2018);
+				y2017.push(data[i].y2017);
+				y2016.push(data[i].y2016);
+				y2015.push(data[i].y2015);
+				y2014.push(data[i].y2014);
+				y2013.push(data[i].y2013);
+				y2012.push(data[i].y2012);
+				y2011.push(data[i].y2011);
+			}
+			var year = ["2011","2012","2013","2014", "2015", "2016", "2017", "2018","2019","2020","2021"];
+			var mapData = [
+			    [],
+			    [],
+			    [],
+			    [],
+			    [],
+			    [],
+				[],
+				[],
+				[],
+				[],
+				[]
+			];
+			console.log(y2021)
+			console.log(mapData)
+			for (var i=0;i<cities.length;i++) {
+				
+				mapData[0].push({
+					"name": cities[i],
+					"value": y2011[i]
+				});
+				mapData[1].push({
+					"name": cities[i],
+					"value": y2012[i]
+				});
+				mapData[2].push({
+					"name": cities[i],
+					"value": y2013[i]
+				});
+				mapData[3].push({
+					"name": cities[i],
+					"value": y2014[i]
+				});
+				mapData[4].push({
+					"name": cities[i],
+					"value": y2015[i]
+				});
+				mapData[5].push({
+					"name": cities[i],
+					"value": y2016[i]
+				});
+				mapData[6].push({
+					"name": cities[i],
+					"value": y2017[i]
+				});
+				mapData[7].push({
+					"name": cities[i],
+					"value": y2018[i]
+				});
+				mapData[8].push({
+					"name": cities[i],
+					"value": y2019[i]
+				});
+				mapData[9].push({
+					"name": cities[i],
+					"value": y2020[i]
+				});
+				mapData[10].push({
+					"name": cities[i],
+					"value": y2021[i]
+				});
+			}
+			
+			
+			var barData = [];
+			var categoryData = [];
+			
+			for (var i = 0; i < mapData.length; i++) {
+				 mapData[i].sort(function sortNumber(a, b) {
+					return a.value - b.value
+				});
+				barData.push([]);
+				categoryData.push([]);
+				for (var j = 0; j < mapData[i].length; j++) {
+					barData[i].push(mapData[i][j].value);
+					categoryData[i].push(mapData[i][j].name);
+				}
+			}
+			
+			
+			console.log(cities)
+			map(cities,mapData,barData,categoryData);
+		}
+		
+		var sqlname1 = "select * from birth_death";
+		var sqlname2 = "select * from sex"
+		var sqlname3 = "select * from education"
+		var sqlname4 = "select * from age"
+		var sqlname5 = "select * from age_sex"
+		var sqlname6 = "select * from marriage"
+		var sqlname7 = "select * from people"
+		function getdata(sqlname,theFunc){
+			$.ajax({
+				type: "GET",
+				data: {sql:sqlname},
+				url: "http://127.0.0.1:80/server",
+				dataType: "json",
+			　　success: function(result){
+					console.log(result);
+					console.log("yes");
+					theFunc(result);
+				}
+			});
+		}
+
+		getdata(sqlname1,bar);
+		getdata(sqlname2,line);
+		getdata(sqlname3,pie);
+		getdata(sqlname4,bar1);
+		getdata(sqlname5,pie1);
+		getdata(sqlname6,line1);
+		getdata(sqlname7,chinaMap);
+	</script>
+  </body>
+</html>
